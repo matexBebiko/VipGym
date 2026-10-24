@@ -1,0 +1,40 @@
+name: Build IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pokaż wersję Xcode
+        run: xcodebuild -version
+
+      - name: Zainstaluj XcodeGen i wygeneruj projekt
+        run: |
+          brew install xcodegen
+          xcodegen
+
+      - name: Zbuduj aplikację (bez podpisu, podpisze Sideloadly)
+        run: |
+          xcodebuild -project VipGym.xcodeproj -scheme VipGym \
+            -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Spakuj do .ipa
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/VipGym.app Payload/
+          zip -qr VipGym.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VipGym-ipa
+          path: VipGym.ipa
