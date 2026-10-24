@@ -1,0 +1,54 @@
+name: VipGym
+options:
+  bundleIdPrefix: com.vipgym
+  deploymentTarget:
+    iOS: "26.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+targets:
+  VipGym:
+    type: application
+    platform: iOS
+    sources:
+      - path: VipGym
+      - path: Shared
+    dependencies:
+      - target: VipGymWidgets
+    info:
+      path: VipGym/Info.plist
+      properties:
+        CFBundleDisplayName: VipGym
+        CFBundleLocalizations: [en, pl]
+        NSSupportsLiveActivities: true
+        NSSupportsLiveActivitiesFrequentUpdates: false
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vipgym.app
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  VipGymWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: VipGymWidgets
+      - path: Shared
+    info:
+      path: VipGymWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: VipGym Live
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vipgym.app.widgets
+        TARGETED_DEVICE_FAMILY: "1"
